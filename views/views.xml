@@ -1,0 +1,156 @@
+<odoo>
+  <data>
+
+      <!--Customer Form View-->
+      <record id="view_partner_form" model="ir.ui.view">
+          <field name="name">view.res.partner.form</field>
+          <field name="model">res.partner</field>
+          <field name="inherit_id" ref="base.view_partner_form" />
+          <field name="priority">1</field>
+          <field name="arch" type="xml">
+               <xpath expr="/form/*" position="before">
+                  <header>
+                      <button string="Confirm" type="object"
+                            name="confirm"
+                            attrs="{'invisible': [('stage','!=','new')]}"
+                            class="oe_highlight"/>
+                      <button string="Approve" type="object"
+                            name="approved" attrs="{'invisible': [('stage','!=','confirm')]}"
+                            class="oe_highlight"/>
+                      <button string="Cancel" type="object"
+                            name="reset_new" attrs="{'invisible': [('stage','!=','confirm')]}"/>
+                      <field name="stage"
+                           widget="statusbar"
+                           options="{'fold_field': 'fold'}"/>
+                  </header>
+              </xpath>
+          </field>
+      </record>
+
+   
+      <!--Action  menu  for customer-->
+      <record id="customer_validation_new_action" model="ir.actions.act_window">
+            <field name="name">New Customer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+             <field name="context">{'search_default_customer':1}</field>
+            <field name="domain">[('customer','=',True),('stage','=','new')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New</p>
+            </field>
+      </record>\
+      <record id="customer_validation_approve_action" model="ir.actions.act_window">
+            <field name="name">Customer To Approve</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="context">{'search_default_customer':1}</field>
+            <field name="domain">[('customer','=',True),('stage','=','confirm')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New</p>
+            </field>
+      </record>
+      <record id="customer_validation_approved_action" model="ir.actions.act_window">
+            <field name="name">Approved Customer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="context">{'search_default_customer':1}</field>
+            <field name="domain">[('customer','=',True),('stage','=','approved')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New</p>
+            </field>
+      </record>
+
+
+      <!--Action  menu  for vendor-->
+      <record id="supplier_validation_new_action" model="ir.actions.act_window">
+            <field name="name">New Vendor</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="context">{'search_default_supplier':1}</field>
+            <field name="domain">[('supplier','=',True),('stage','=','new')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New</p>
+            </field>
+      </record>
+      <record id="supplier_validation_approve_action" model="ir.actions.act_window">
+            <field name="name">Vendor To Approve</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="context">{'search_default_supplier':1}</field>
+            <field name="domain">[('supplier','=',True),('stage','=','confirm')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New</p>
+            </field>
+      </record>
+      <record id="supplier_validation_approved_action" model="ir.actions.act_window">
+            <field name="name">Vendor Approved</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="context">{'search_default_supplier':1}</field>
+            <field name="domain">[('supplier','=',True),('stage','=','approved')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New</p>
+            </field>
+      </record>
+
+
+
+      <!--Menu Item-->
+      <menuitem name="Customer Validation" id="fax_sale_menu"
+                parent="sale.sale_order_menu" sequence="3"/>
+
+      <menuitem action="customer_validation_new_action"
+                name="New Customer"
+                id="menu_customer_new_action"
+                parent="fax_sale_menu" sequence="1"/>
+      <menuitem action="customer_validation_approve_action"
+                name="Customer To Approve"
+                id="menu_customer_to_approve_action"
+                parent="fax_sale_menu" sequence="2"/>
+      <menuitem action="customer_validation_approved_action"
+                name="Approved Customer"
+                id="menu_customer_approved_action"
+                parent="fax_sale_menu" sequence="3"/>
+
+
+      <!--Menu purchases -->
+      <menuitem name="Vendor Validation" id="fax_purchase_menu"
+                parent="purchase.menu_procurement_management"
+                sequence="16"/>
+
+      <menuitem action="supplier_validation_new_action"
+                name="New Vendor"
+                id="menu_vendor_new_action"
+                parent="fax_purchase_menu" sequence="1"/>
+
+      <menuitem action="supplier_validation_approve_action"
+                name="Vendor To Approved"
+                id="menu_vendor_to_approve_action"
+                parent="fax_purchase_menu" sequence="2"/>
+
+      <menuitem action="supplier_validation_approved_action"
+                name="Approved Vendor"
+                id="menu_vendor_approved_action"
+                parent="fax_purchase_menu" sequence="3"/>
+
+
+  </data>
+</odoo>
